@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="UTF-16"?>
+<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
-    <Date>2024-02-28T16:33:33.6328603</Date>
-    <Author>HW\KosachevIV</Author>
+    <Date>2024-07-30T12:38:43</Date>
+    <Author>.\dev</Author>
     <Description>Запуск узла для расчётов в консольной версии tnav</Description>
     <URI>\tnav_node</URI>
   </RegistrationInfo>
@@ -13,7 +13,7 @@
   </Triggers>
   <Principals>
     <Principal id="Author">
-      <UserId>S-1-5-21-2601812405-3896699035-693922572-1561</UserId>
+      <UserId>S-1-5-21-2601812405-3896699035-693922572-1760</UserId>
       <LogonType>Password</LogonType>
       <RunLevel>HighestAvailable</RunLevel>
     </Principal>
