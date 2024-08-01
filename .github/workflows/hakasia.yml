@@ -9,8 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: hakasia
-
+    runs-on: W09531-oilcasex
     steps:
     - uses: actions/checkout@v4
     - name: Stop tNavigatorComputingNode.exe
