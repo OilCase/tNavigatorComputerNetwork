@@ -37,7 +37,7 @@ jobs:
       shell: cmd
       working-directory: tNavigatorComputingNode
       continue-on-error: true
-      run: schtasks /create /ru ./dev /rp Dev2024 /xml .\tnav_node.xml /tn tnav_node_oilcase 
+      run: schtasks /create /ru ./dev /rp Dev2024 /xml .\tnav_node.xml /tn tnav_node_oilcase_hakasia 
 
     - name: Copy dir 
       shell: cmd
@@ -48,4 +48,4 @@ jobs:
     - name: Start tNavigatorComputingNode.exe
       run: |
         cd C:\tNavNode
-        schtasks /run /tn tnav_node
+        schtasks /run /tn tnav_node_oilcase_hakasia
