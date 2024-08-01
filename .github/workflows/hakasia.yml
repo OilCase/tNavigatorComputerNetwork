@@ -47,5 +47,5 @@ jobs:
     # ���������� �������� � ����������� ����� tnav_node ������!
     - name: Start tNavigatorComputingNode.exe
       run: |
-        cd C:\tNavNode
+        cd C:\tNavNodeHakasia
         schtasks /run /tn tnav_node_oilcase_hakasia
