@@ -27,7 +27,7 @@ internal class Program
         {
             try
             {
-                var brokerForConsumeTask = config.GetBroker(BrokerQueue.ModelReadyCalculation);
+                var brokerForConsumeTask = config.GetBroker(BrokerQueue.Hakasia);
                 brokerForConsumeTask.ConsumeMessageAsync(Calculate);
                 Console.ReadKey();
             }

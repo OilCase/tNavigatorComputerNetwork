@@ -10,6 +10,7 @@ public enum BrokerQueue
     ModelCalculation,
     ModelReadyCalculation,
     ModelResult,
+    Hakasia
 }
 
 public class RabbitMQMessageBroker(
@@ -23,6 +24,7 @@ public class RabbitMQMessageBroker(
     {
         BrokerQueue.ModelCalculation => "model-calculation",
         BrokerQueue.ModelReadyCalculation => "model-ready-calculation",
+        BrokerQueue.Hakasia => "hakasia",
         BrokerQueue.ModelResult =>
             $"model-result{resultQueueName ?? throw new ArgumentException("if BrokerQueue is ModelResult resultQueueName can't be null")}",
         _ => throw new ArgumentOutOfRangeException(nameof(queue), queue, null)
