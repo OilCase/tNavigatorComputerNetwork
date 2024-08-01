@@ -45,8 +45,8 @@
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>C:\tNavNodeHakasia\tNavigatorComputingNode.exe</Command>
-      <WorkingDirectory>C:\tNavNodeHakasia</WorkingDirectory>
+      <Command>C:\tNavNode\tNavigatorComputingNode.exe</Command>
+      <WorkingDirectory>C:\tNavNode</WorkingDirectory>
     </Exec>
   </Actions>
 </Task>
