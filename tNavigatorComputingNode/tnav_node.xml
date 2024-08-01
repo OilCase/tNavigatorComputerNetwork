@@ -2,7 +2,7 @@
 <Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
     <Date>2024-02-28T16:33:33.6328603</Date>
-    <Author>w08200\admin</Author>
+    <Author>HW\KosachevIV</Author>
     <Description>Запуск узла для расчётов в консольной версии tnav</Description>
     <URI>\tnav_node</URI>
   </RegistrationInfo>
@@ -45,8 +45,8 @@
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>C:\tNavNode\tNavigatorComputingNode.exe</Command>
-      <WorkingDirectory>C:\tNavNode</WorkingDirectory>
+      <Command>C:\tNavNodeHakasia\tNavigatorComputingNode.exe</Command>
+      <WorkingDirectory>C:\tNavNodeHakasia</WorkingDirectory>
     </Exec>
   </Actions>
 </Task>
