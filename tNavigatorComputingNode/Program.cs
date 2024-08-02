@@ -91,8 +91,11 @@ public class Program
             }
             catch (Exception e)
             {
-                Log.Write(result.Report += e.Message + e +
-                                     $"Time Complete: {sw.Elapsed:g} {JsonSerializer.Serialize(launcherConfig)}");
+                result.Report += e.Message + e +
+                                              $"Time Complete: {sw.Elapsed:g} {JsonSerializer.Serialize(launcherConfig)}";
+                
+                Log.Write(result.Report);
+                Attempt(() => SendResult(project.ResultAddress, "Failed", result));
             }
 
             Log.Write("Iteration complete\n");
