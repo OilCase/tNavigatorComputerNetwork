@@ -2,7 +2,7 @@
 
 namespace tNavigatorModels.Result;
 
-using CalculationResult = Dictionary<string, Dictionary<DateTime, double>>;
+using CalculationResult = Dictionary<string, double[]>;
 
 public enum EnumDataType
 {
@@ -120,7 +120,7 @@ public class ModelResult
     {
         ReCalculate("WGPR", "WCPR", GasToCondensate);
         ReCalculate("FGPR", "FCPR", GasToCondensate);
-        
+
         return;
 
         void ReCalculate(string originKey, string newKey, Func<double, double> transformation)
@@ -131,9 +131,7 @@ public class ModelResult
                 .ForEach(pair =>
                 {
                     var newName = pair.Key.Replace(originKey, newKey);
-                    CalculationResult[newName] = pair.Value
-                        .OrderBy(p => p.Key)
-                        .ToDictionary(v => v.Key, v => transformation(v.Value));
+                    CalculationResult[newName] = [..pair.Value.Select(transformation)];
                 });
         }
 
@@ -148,80 +146,67 @@ public class ModelResult
             return condensateTones;
         }
     }
-        
+
 
     /// <summary>Возврщает значение всех дебитов с точностью в день. По месторождению</summary>
     public MultiValuePoint[] GetPoints()
     {
         if (!CalculationResult.ContainsKey($"{EnumPointKeys.FOPR}"))
             return [];
-        var result = CalculationResult[$"{EnumPointKeys.FOPR}"].Keys.Select(g =>
-            new MultiValuePoint(
-                g,
-                //CalculationResult[$"{EnumPointKeys.FVPR}"][g],
-                //UpMax(CalculationResult[$"{EnumPointKeys.FVPR}"][g], 1200),
-               CalculationResult.Keys.Where(k => k.Contains($"{EnumPointKeys.WLPR}:"))
-                    .Sum(k => limit(CalculationResult[k][g], 900)),
+        var result = Enumerable.Range(0, CalculationResult["YEAR"].Length).Select(i =>
+            {
+                DateTime date = new DateTime(
+                    (int)CalculationResult["YEAR"][i],
+                    (int)CalculationResult["MONTH"][i],
+                    (int)CalculationResult["DAY"][i]);
 
-                CalculationResult[$"{EnumPointKeys.FWPR}"][g],
-                //CalculationResult[$"{EnumPointKeys.FOPR}"][g],
-                //UpMax(CalculationResult[$"{EnumPointKeys.FOPR}"][g], 450),
-                CalculationResult.Keys.Where(k => k.Contains($"{EnumPointKeys.WOPR}:"))
-                    .Sum(k => limit(CalculationResult[k][g], 450)),
+                return new MultiValuePoint(date,
+                    TotalDebitByDay(EnumPointKeys.WLPR, 900),
+                    CalculationResult[$"{EnumPointKeys.FWPR}"][i],
+                    TotalDebitByDay(EnumPointKeys.WOPR, 900),
+                    TotalDebitByDay(EnumPointKeys.WGPR, 300),
+                    TotalDebitByDay(EnumPointKeys.WCPR, 450),
+                    0,
+                    0);
 
-                //UpMax(CalculationResult[$"{EnumPointKeys.FGPR}"][g], 300),
-                CalculationResult.Keys.Where(k => k.Contains($"{EnumPointKeys.WGPR}:"))
-                    .Sum(k => limit(CalculationResult[k][g], 300)),
-
-                //CalculationResult[$"{EnumPointKeys.FCPR}"][g],
-                CalculationResult.Keys.Where(k => k.Contains($"{EnumPointKeys.WCPR}:"))
-                    .Sum(k => limit(CalculationResult[k][g], 450)),
-                0,
-                0
-            )).ToArray();
+                double TotalDebitByDay(EnumPointKeys enumPointKeys, double upLimitValue) => CalculationResult.Keys
+                    .Where(k => k.Contains($"{enumPointKeys}:"))
+                    .Sum(k => Math.Min(CalculationResult[k][i], upLimitValue));
+            }
+        ).ToArray();
         return result;
-
-        double limit(double value, double upLimit) 
-        {
-            var result = Math.Min(value, upLimit);
-            return result;
-        }
     }
 
     /// <summary>Возврщает значение всех дебитов с точностью в день. По скважине</summary>
     public MultiValuePoint[] GetPoints(string boreholeName)
     {
-        //var x = CalculationResult.ToDictionary(p => p.Key, p => p.Value.Values.OrderByDescending(c => c));
         var boreholeParamsHistory = CalculationResult
-            .Where(cr => cr.Key.Contains(boreholeName))
+            .Where(cr =>
+                cr.Key.Contains(boreholeName)
+                || cr.Key == "YEAR"
+                || cr.Key == "MONTH"
+                || cr.Key == "DAY"
+            )
             .ToDictionary(pair => pair.Key.Split(':').First(), pair => pair.Value);
 
         if (!boreholeParamsHistory.ContainsKey($"{EnumPointKeys.WOPR}"))
             return [];
 
-        var result = boreholeParamsHistory[$"{EnumPointKeys.WOPR}"].Keys
-            .Select(g =>
-                new MultiValuePoint(
-                    g,
-                    //boreholeParamsHistory[$"{EnumPointKeys.WLPR}"][g],
-                    UpMax(boreholeParamsHistory[$"{EnumPointKeys.WLPR}"][g], 900),
-                    boreholeParamsHistory[$"{EnumPointKeys.WWPR}"][g],
-                    //boreholeParamsHistory[$"{EnumPointKeys.WOPR}"][g],
-                    UpMax(boreholeParamsHistory[$"{EnumPointKeys.WOPR}"][g], 450),
-                    UpMax(boreholeParamsHistory[$"{EnumPointKeys.WGPR}"][g], 300),
-                    UpMax(boreholeParamsHistory[$"{EnumPointKeys.WCPR}"][g], 450),
-                    //boreholeParamsHistory[$"{EnumPointKeys.WCPR}"][g],
-                    boreholeParamsHistory[$"{EnumPointKeys.WBHP}"][g],
-                    boreholeParamsHistory[$"{EnumPointKeys.WTHP}"][g]
-                )
-            ).ToArray();
+        var result = Enumerable.Range(0, CalculationResult["YEAR"].Length).Select(i =>
+            new MultiValuePoint(
+                new DateTime((int)CalculationResult["YEAR"][i],
+                    (int)CalculationResult["MONTH"][i],
+                    (int)CalculationResult["DAY"][i]),
+                Math.Min(boreholeParamsHistory[$"{EnumPointKeys.WLPR}"][i], 900),
+                boreholeParamsHistory[$"{EnumPointKeys.WWPR}"][i],
+                Math.Min(boreholeParamsHistory[$"{EnumPointKeys.WOPR}"][i], 450),
+                Math.Min(boreholeParamsHistory[$"{EnumPointKeys.WGPR}"][i], 300),
+                Math.Min(boreholeParamsHistory[$"{EnumPointKeys.WCPR}"][i], 450),
+                boreholeParamsHistory[$"{EnumPointKeys.WBHP}"][i],
+                boreholeParamsHistory[$"{EnumPointKeys.WTHP}"][i]
+            )
+        ).ToArray();
 
         return result;
-
-        double UpMax(double value, double upLimit)
-        {
-            var result = Math.Min(value, upLimit);
-            return result;
-        }
     }
 }

@@ -23,23 +23,11 @@ public class Program
 
         var host = Dns.GetHostName();
 
-        const string bobSafronov = "W09531";
-        const string yaroslav = "W10532";
-        const string kos4v = "W10954";
-
-        //return;
-        //switch (host)
-        //{
-        //    case yaroslav:
-        //    case bobSafronov:
-        //        return;
-        //}
+        const string kos4v = "W10534";
 
         string configPath = host switch
         {
             kos4v => "config.Development.json",
-            //yaroslav => "config.BobSafronov.json",
-            //bobSafronov => "config.Development.json",
             _ => "config.json"
         };
         var config = NodeConfig.LoadConfig(configPath);
@@ -83,7 +71,7 @@ public class Program
 
                 while (CaseIsLive(project.ResultAddress) & !resultTask.IsCompleted)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(5000);
                 }
                 if (!resultTask.IsCompleted)
                 {
@@ -115,11 +103,8 @@ public class Program
                 using var client = new HttpClient();
                 using var response = client.GetAsync($"{url}&onlyStatus=true").Result;
 
-                var res = response.Content.ReadAsStringAsync().Result;
-
-                //Log.Write($"Response: {response.StatusCode}, id: {res}");
                 string responseContent = response.Content.ReadAsStringAsync().Result;
-                var result = !responseContent.ToLower().Contains("cancel");
+                var result = !(responseContent.Contains("Cancelled") || responseContent.Contains("Received"));
                 return result;
             }
             catch (Exception e) {
