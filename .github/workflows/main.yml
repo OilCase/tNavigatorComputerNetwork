@@ -1,4 +1,4 @@
-name: .NET publish main branch
+name: .NET publish mainbranch
 
 on:
   push:
@@ -13,7 +13,6 @@ jobs:
     strategy:
         fail-fast: true
         matrix: 
-            # os: [main, W10532]
             os: [W09531, W10532]
 
     runs-on: ${{matrix.os}}
