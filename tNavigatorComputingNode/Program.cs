@@ -56,7 +56,7 @@ public class Program
             var resultMessage = Encoding.UTF8.GetString(message);
             var project = JsonSerializer.Deserialize<Project>(resultMessage)! with
             {
-                ConverterAddress = "localhost"
+                ConverterAddress = "http://localhost"
             };
             var result = new ModelResult()
             {
