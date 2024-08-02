@@ -54,10 +54,11 @@ public class Program
             var sw = Stopwatch.StartNew();
             LauncherConfig? launcherConfig = null;
             var resultMessage = Encoding.UTF8.GetString(message);
-            var project = JsonSerializer.Deserialize<Project>(resultMessage)! with
-            {
-                ConverterAddress = "http://localhost:8085"
-            };
+            var project = JsonSerializer.Deserialize<Project>(resultMessage)!;
+            //    with
+            //{
+            //    ConverterAddress = "http://localhost:8085"
+            //};
             var result = new ModelResult()
             {
                 TeamName = project.Team.Name
