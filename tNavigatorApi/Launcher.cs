@@ -29,7 +29,7 @@ namespace tNavigatorLauncher
         public tNavigatorModels.Result.ModelResult Start()
         {
             CreateProjectFiles();
-            // TNavigatorRun();
+            TNavigatorRun();
             var calculationResult = ReadCalculationResult();
             return calculationResult;
         }
