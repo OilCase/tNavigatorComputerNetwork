@@ -23,6 +23,7 @@ public class RabbitMQMessageBroker(
 {
     public string QueueName => queue switch
     {
+        BrokerQueue.Hakasia=> "hakasia",
         BrokerQueue.ModelCalculation => "model-calculation",
         BrokerQueue.ModelReadyCalculation => "model-ready-calculation",
         BrokerQueue.ModelResult =>
