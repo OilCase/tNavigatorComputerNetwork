@@ -11,6 +11,7 @@ public enum BrokerQueue
     ModelCalculation,
     ModelReadyCalculation,
     ModelResult,
+    Hakasia,
 }
 
 public class RabbitMQMessageBroker(
