@@ -22,9 +22,9 @@ public class RabbitMQMessageBroker(
 {
     public string QueueName => queue switch
     {
+        BrokerQueue.Hakasia => "hakasia",
         BrokerQueue.ModelCalculation => "model-calculation",
         BrokerQueue.ModelReadyCalculation => "model-ready-calculation",
-        BrokerQueue.Hakasia => "hakasia",
         BrokerQueue.ModelResult =>
             $"model-result{resultQueueName ?? throw new ArgumentException("if BrokerQueue is ModelResult resultQueueName can't be null")}",
         _ => throw new ArgumentOutOfRangeException(nameof(queue), queue, null)
