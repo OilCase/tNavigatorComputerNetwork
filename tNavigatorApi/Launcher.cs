@@ -20,7 +20,7 @@ namespace tNavigatorLauncher
 
         public static async Task SendTask(BrokerConfig config, Project project)
         {
-            var calculationBroker = config.GetBroker(BrokerQueue.Hakasia);
+            var calculationBroker = config.GetBroker(BrokerQueue.ModelReadyCalculation);
             var data = JsonSerializer.Serialize(project);
             await calculationBroker.PublishMessage(data);
         }
